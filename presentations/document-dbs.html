@@ -399,7 +399,7 @@ $ mongo recruit-me examples/advanced/find_size.js
       </section>
       <section>
         <h2>Replica-Set Example</h2>
-
+        <p>&nbsp;</p>
         <h5>Terminal Tab 1</h5>
         <pre><code data-trim class="javascript">
 $ mkdir -p /tmp/mongodb/rs0-0 /tmp/mongodb/rs0-1 /tmp/mongodb/rs0-2
@@ -415,7 +415,7 @@ $ mongod --port 27018 --dbpath /tmp/mongodb/rs0-1 \
 
         <h5>Terminal Tab 3</h5>
         <pre><code data-trim class="javascript">
-$ mongod --port 27019 --dbpath /tmp/mongodb/rs0-2\
+$ mongod --port 27019 --dbpath /tmp/mongodb/rs0-2 \
   --replSet rs0 --smallfiles --oplogSize 128
         </code></pre>
       </section>
@@ -523,6 +523,29 @@ $ mongo --port 27017
         <p>
           <a href="http://www.elasticsearch.org/" target="_blank">Elastic Search</a>
         </p>
+      </section>
+      <section>
+        <h2>Task 2 - MongoDB Sharding</h2>
+        <p>Run a local sharded MongoDB cluster, and shard your imported users table by full name and address</p>
+      </section>
+      <section>
+        <h2>Task 3 - Elastic Search</h2>
+        <ol>
+          <li>
+            Install Elastic Search using the installer inside <em>materials/elasticsearch/install.sh</em>
+          </li>
+          <li>
+            Take a few user records from the <em>mongodb/exports</em> folder and index them into Elastic Search using cURL
+          </li>
+          <li>
+            Query Elastic Search using cURL for the following information:
+            <ul>
+              <li>Users who know Hadoop</li>
+              <li>Users who have three or more skills</li>
+              <li>Users who live in Croatia or Australia</li>
+            </ul>
+          </li>
+        </ol>
       </section>
     </div>
   </div>
