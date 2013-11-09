@@ -1,0 +1,27 @@
+{
+  "name": "Big Data Training",
+  "version": "0.0.1",
+  "description": "Big Data Training",
+  "homepage": "",
+  "scripts": {
+    "start": ""
+  },
+  "author": {
+    "name": "Zohar Arad",
+    "email": "zohar@zohararad.com",
+    "web": "http://www.zohararad.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:zohararad/big-data-training.git"
+  },
+  "engines": {
+    "node": "~0.8.0"
+  },
+  "dependencies": {
+    "underscore": "~1.5.1",
+    "express": "~2.5.9",
+    "mustache": "~0.7.2",
+    "socket.io": "~0.9.13"
+  }
+}

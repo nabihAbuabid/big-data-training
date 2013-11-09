@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Document Databases</title>
+
+  <meta name="description" content="Getting started with Document Databases">
+  <meta name="author" content="Zohar Arad">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="./reveal.js/css/reveal.min.css">
+  <link rel="stylesheet" href="./reveal.js/css/theme/solarized.css" id="theme">
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+    document.write( '<link rel="stylesheet" href="./reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="./reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+
+    <div class="slides">
+
+      <section>
+        <h1>Document Databases</h1>
+        <h3>Big Data Training</h3>
+        <p>
+          <small>Zohar Arad. &copy; 2013</small>
+        </p>
+      </section>
+
+      <section>
+        <h2>In the Beginning</h2>
+        <p>Relational Databases were born.</p>
+        <p>A long long time before the Web.</p>
+      </section>
+
+      <section>
+        <p>Originally, RDBMS Were not designed for some modern use-cases</p>
+      </section>
+
+      <section>
+        <ul>
+          <li>Millions of connections (Think banks vs. Facebook)</li>
+          <li class="fragment roll-in">Horizontal Scaling (Clustering)</li>
+          <li class="fragment roll-in">High-Availability (Replications)</li>
+          <li class="fragment roll-in">Variable Schemas (Wordpress' wp_options table)</li>
+          <li class="fragment roll-in">Complex data-types (Arrays, Hashes, Geo-Location)</li>
+          <li class="fragment roll-in">One-size-fit-all data-store</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>
+          This is not to say RDBMS are not good!<br/>
+          They're actually <strong>awesome</strong>.
+        </p>
+        <div class="fragment roll-in">
+          <hr/>
+          <p>But, they cannot accommodate all the requirements of the modern world.</p>
+        </div>
+      </section>
+
+      <section>
+        <h2>Say "Hello" to Document Databases</h2>
+      </section>
+
+
+      <section>
+        <h3>Document databases try to solve some of the problems above</h3>
+      </section>
+
+      <section>
+        <ul>
+          <li>Schema-less data model thanks to JSON</li>
+          <li class="fragment roll-in">Use JSON for complex data-types (Arrays, Hashes)</li>
+          <li class="fragment roll-in">Avoid slow joins by removing relationships</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>Popular Document Databases include:</h3>
+      </section>
+
+      <section>
+        <h3>MongoDB</h3>
+        <p>BSON-based, C++, Scalable, Highly-Available, Sharding, M/R, Aggregations</p>
+      </section>
+
+      <section>
+        <h3>CouchDB</h3>
+        <p>JSON-Based, Erlang, Highly-Available, M/R, Eventually-Consistent</p>
+      </section>
+
+      <section>
+        <h3>OrientDB</h3>
+        <p>Java, Embeddable, Graph-support, Transactional, SQL-support</p>
+      </section>
+
+      <section>
+        <h3>RavenDB</h3>
+        <p>.NET, Transactional, Scalable, Highly-Available, Sharding, Multi-Tenant, Versioned, Full-Text Search</p>
+      </section>
+
+      <section>
+        <h3>RethinkDB</h3>
+        <p>JSON, RQL, Scalable, Highly-Available, Sharding, M/R, Joins, Aggregations, Multi-Tenant</p>
+      </section>
+
+      <section>
+        <h3>Use Cases</h3>
+        <ul>
+          <li>
+            <strong>User Options</strong> - Variable record-level meta-data (with indexing)
+          </li>
+          <li class="fragment roll-in">
+            <strong>Blog Post Comments</strong> -
+            Record-level relationships (embedded documents)
+          </li>
+          <li class="fragment roll-in">
+            <strong>Tagging, Geo-Location</strong> -
+            Complex, indexed data-types
+          </li>
+          <li class="fragment roll-in">
+            <strong>Web Scrapping</strong> -
+            Unknown schemas
+          </li>
+          <li class="fragment roll-in">
+            <strong>CouchApps</strong> -
+            Server-less applications</li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Let's take a break</h1>
+      </section>
+
+      <section>
+        <h1>MongoDB</h1>
+        <h4>All Magic Comes At a Price</h4>
+      </section>
+
+      <section>
+        <h3>Notable Features</h3>
+        <ul>
+          <li>Schema-free, Binary JSON data-model</li>
+          <li class="fragment roll-in">Embeddable documents</li>
+          <li class="fragment roll-in">Composite and sparse indexing</li>
+          <li class="fragment roll-in">Geospatial Indexes</li>
+          <li class="fragment roll-in">Javascript-based queries</li>
+          <li class="fragment roll-in">M/R and aggregations</li>
+          <li class="fragment roll-in">Replications and Sharding</li>
+          <li class="fragment roll-in">Capped Collections</li>
+          <li class="fragment roll-in">Easy setup, good docs, very popular</li>
+        </ul>
+      </section>
+
+      <section>
+        <h3>But all magic comes with a price!</h3>
+        <ul>
+          <li>Single-threaded</li>
+          <li class="fragment roll-in">No authentication by default</li>
+          <li class="fragment roll-in">Data needs to fit into memory</li>
+          <li class="fragment roll-in">No persistence guarantee</li>
+          <li class="fragment roll-in">Beware of index-bloat (not just in MongoDB)</li>
+          <li class="fragment roll-in">Schema-less data model can be confusing at first (not just in MongoDB)</li>
+        </ul>
+      </section>
+    </div>
+
+  </div>
+
+  <script src="./reveal.js/lib/js/head.min.js"></script>
+  <script src="./reveal.js/js/reveal.min.js"></script>
+
+  <script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      center: true,
+      //width: '100%',
+      //height: '100%',
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        // Syntax highlight for <code> elements
+        { src: './reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+    });
+
+  </script>
+</body>
+</html>
