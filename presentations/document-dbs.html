@@ -53,7 +53,7 @@
 
       <section>
         <ul>
-          <li>Millions of connections (Think banks vs. Facebook)</li>
+          <li>Millions of opts/sec (Think banks vs. Facebook)</li>
           <li class="fragment roll-in">Horizontal Scaling (Clustering)</li>
           <li class="fragment roll-in">High-Availability (Replications)</li>
           <li class="fragment roll-in">Variable Schemas (Wordpress' wp_options table)</li>
@@ -96,7 +96,7 @@
 
       <section>
         <h3>MongoDB</h3>
-        <p>BSON-based, C++, Scalable, Highly-Available, Sharding, M/R, Aggregations</p>
+        <p>BSON-based, C++, Scalable, Highly-Available, Sharding, Multi-Tenant, M/R, Aggregations</p>
       </section>
 
       <section>
@@ -178,8 +178,353 @@
           <li class="fragment roll-in">Schema-less data model can be confusing at first (not just in MongoDB)</li>
         </ul>
       </section>
-    </div>
 
+      <section>
+        <h2>Getting our hands dirty</h2>
+        <pre><code data-trim class="javascript">
+$ git clone git@github.com:zohararad/big-data-training.git big-data
+$ cd big-data/mongodb
+$ ./install.sh</code></pre>
+      </section>
+
+      <section>
+        <h2>Some Basic MongoDB Commands</h2>
+      </section>
+
+      <section>
+        <pre><code data-trim class="javascript">
+$ mongo
+> show dbs;
+> use mongo-demo;
+> show collections;</code></pre>
+      </section>
+
+      <section>
+        <h2>Create Record</h2>
+        <pre><code data-trim class="javascript">
+> var now = new Date();
+> db.users.insert({
+    firstname: 'Zohar',
+    lastname: 'Arad',
+    email: 'zohar@arad.com',
+    skills: ['Javascript', 'CSS', 'HTML', 'MongoDB', 'Ruby'],
+    created_at: now,
+    updated_at: now
+  });</code></pre>
+      </section>
+
+      <section>
+        <h2>Find Record</h2>
+        <pre><code data-trim class="javascript">
+> var zohar = db.users.findOne({email: 'zohar@arad.com'});
+> printjson(zohar);</code></pre>
+      </section>
+
+      <section>
+        <h2>Update Record</h2>
+        <pre><code data-trim class="javascript">
+> var zohar = db.users.findOne({email: 'zohar@arad.com'});
+> db.users.update(
+    {_id: zohar._id},
+    {
+      $set: { height: 187 }
+    }
+  );
+
+> db.users.update(
+    {_id: zohar._id},
+    {
+      $push: { skills: "Scala" }
+    }
+  );</code></pre>
+      </section>
+
+      <section>
+        <h2>Delete Record</h2>
+        <pre><code data-trim class="javascript">
+> db.users.remove({email: 'zohar@arad.com'});</code></pre>
+      </section>
+
+      <section>
+        <h2>Advanced Operations</h2>
+        <h4>Let's import some data first...</h4>
+        <pre><code data-trim class="javascript">
+$ cd exports
+$ ./import.sh</code></pre>
+      </section>
+      <section>
+        <h3>Use Case - Recruitment Application</h3>
+        <p>
+          A collection of users, where each user record includes:
+        </p>
+        <ul>
+          <li>Basic information</li>
+          <li>Address (Hash-based data)</li>
+          <li>List of previous employments - Embedded Documents</li>
+          <li>List of skills</li>
+          <li>List of friends - Array of ObjectIds</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Example Record</h3>
+        <pre><code data-trim class="javascript">
+$ mongo
+> use recruit-me;
+> show collections;
+> db.users.findOne();
+        </code></pre>
+      </section>
+
+      <section>
+        <h2>Hands-On Experimentation</h2>
+        <p>Look inside <em>mongodb/examples</em></p>
+        <hr/>
+        <ul>
+          <li>
+            <strong> advanced </strong> - Advanced queries examples (check out <em>indices.js</em>)
+          </li>
+          <li>
+            <strong> embedded </strong> - Operations on embedded documents
+          </li>
+          <li>
+            <strong> mapr </strong> - Map-Reduce example
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3>Running the examples</h3>
+        <pre><code data-trim class="javascript">
+$ mongo recruit-me examples/advanced/find_size.js
+        </code></pre>
+      </section>
+      <section>
+        <h2>Task - Step 1</h2>
+        <ul>
+          <li>Find users who's first name starts with "Jo"</li>
+          <li>Find users who's first name is not "John"</li>
+        </ul>
+        <hr />
+        <p>
+          <small>Find more about <a href="http://docs.mongodb.org/manual/reference/operator/query/regex/" target="_blank">regex queries</a></small>
+        </p>
+      </section>
+      <section>
+        <h2>Task - Step 2</h2>
+        <ul>
+          <li>Find users who know "Ruby" or "Java"</li>
+          <li>Find users who worked as developers</li>
+        </ul>
+        <hr />
+        <p>
+          <small>
+            Find more about <a href="http://docs.mongodb.org/manual/reference/operator/query/in/#op._S_in" target="_blank">array queries</a> and <a href="http://docs.mongodb.org/manual/tutorial/query-documents/" target="_blank">sub-documents</a>
+          </small>
+        </p>
+      </section>
+      <section>
+        <h2>Task - Step 3</h2>
+        <ul>
+          <li>
+            Add indices for:
+            <ul>
+              <li>first and last name</li>
+              <li>skills</li>
+              <li>employment.position</li>
+            </ul>
+          </li>
+        </ul><hr />
+        <p>
+          <small>
+            Find more about <a href="http://docs.mongodb.org/manual/core/index-creation/" target="_blank">indices</a>
+          </small>
+        </p>
+      </section>
+      <section>
+        <h2>Further Reading</h2>
+        <ul>
+          <li>
+            <a href="http://docs.mongodb.org/manual/reference/operator/query/" target="_blank">Query Reference</a>
+          </li>
+          <li>
+            <a href="http://docs.mongodb.org/manual/reference/operator/query-logical/" target="_blank">Logical Operators</a>
+          </li>
+          <li>
+            <a href="http://docs.mongodb.org/manual/core/indexes/" target="_blank">Indexing</a>
+          </li>
+          <li>
+            <a href="http://docs.mongodb.org/manual/reference/operator/aggregation/" target="_blank">Aggregation Framework</a>
+          </li>
+          <li>
+            <a href="http://docs.mongodb.org/manual/core/map-reduce/" target="_blank">Map/Reduce</a>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h1>Another Break</h1>
+      </section>
+      <section>
+        <h2>MongoDB Replications</h2>
+      </section>
+      <section>
+        <p>MongoDB achieves high-availabity via a <strong>replica-set</strong>, which is a cluster of <strong>mongod</strong> instances</p>
+      </section>
+      <section>
+        <p>One instance functions as a primary, while the others function as secondaries</p>
+        <hr />
+        <p>In case of primary node failure, a new primary node is elected from existing secondaries in the replica-set</p>
+      </section>
+      <section>
+        <h2>Important!</h2>
+        <p>
+          MongoDB's replications are asynchronous. This means that replicated data is eventually-consistent.
+        </p>
+      </section>
+      <section>
+        <h3>MondoDB Replica-Set</h3>
+        <p>
+          <img src="http://docs.mongodb.org/v2.4/_images/replica-set-primary-with-two-secondaries.png">
+        </p>
+        <p>
+          <small>Source: docs.mongodb.org</small>
+        </p>
+      </section>
+      <section>
+        <p>Primary node election can utilize an <strong>arbiter</strong> node, which does not replicate data, but participates in the election process</p>
+        <p>
+          <img src="http://docs.mongodb.org/v2.4/_images/replica-set-primary-with-secondary-and-arbiter.png">
+        </p>
+        <p>
+          <small>Source: docs.mongodb.org</small>
+        </p>
+      </section>
+      <section>
+        <h2>Replica-Set Example</h2>
+
+        <h5>Terminal Tab 1</h5>
+        <pre><code data-trim class="javascript">
+$ mkdir -p /tmp/mongodb/rs0-0 /tmp/mongodb/rs0-1 /tmp/mongodb/rs0-2
+$ mongod --port 27017 --dbpath /tmp/mongodb/rs0-0 \
+  --replSet rs0 --smallfiles --oplogSize 128
+        </code></pre>
+
+        <h5>Terminal Tab 2</h5>
+        <pre><code data-trim class="javascript">
+$ mongod --port 27018 --dbpath /tmp/mongodb/rs0-1 \
+  --replSet rs0 --smallfiles --oplogSize 128
+        </code></pre>
+
+        <h5>Terminal Tab 3</h5>
+        <pre><code data-trim class="javascript">
+$ mongod --port 27019 --dbpath /tmp/mongodb/rs0-2\
+  --replSet rs0 --smallfiles --oplogSize 128
+        </code></pre>
+      </section>
+      <section>
+        <h2>Replica-Set Example</h2>
+
+        <h5>Terminal Tab 4</h5>
+        <pre><code data-trim class="javascript">
+$ mongo --port 27017
+> rsconf = {
+    _id: "rs0",
+    members: [
+      {
+        _id: 0,
+        host: "localhost:27017"
+      }
+    ]
+  }
+> rs.initiate( rsconf )
+> rs.add("localhost:27018")
+> rs.add("localhost:27019")
+        </code></pre>
+      </section>
+      <section>
+        <h2>Further Reading</h2>
+        <p>
+          <a href="http://docs.mongodb.org/manual/replication/" target="_blank">MongoDB Replication</a>
+        </p>
+      </section>
+      <section>
+        <h2>MongoDB Sharding</h2>
+      </section>
+      <section>
+        <p>MongoDB supports collection-level sharding of data using either a hash or a range based shard key.</p>
+        <hr />
+        <p>Shard keys are defined using a single or a composite field that <strong>exists</strong> in all documents</p>
+      </section>
+      <section>
+        <h2>Sharded Cluster Components</h2>
+        <ul>
+          <li>
+            <strong>shards</strong> - <em>mongod</em> instances / replica-sets that store data.
+          </li>
+          <li>
+            <strong>query routes</strong> - <em>mongos</em> instances that route queries to the appropriate shards.
+          </li>
+          <li>
+            <strong>config servers</strong> - <em>mongod</em> instances that store cluster meta-data.
+          </li>
+        </ul>
+      </section>
+      <section>
+        <p>
+          <img src="http://docs.mongodb.org/v2.4/_images/sharded-cluster-production-architecture.png">
+        </p>
+        <p>
+          <small>Source: docs.mongodb.org</small>
+        </p>
+      </section>
+      <section>
+        <h2>Further Reading</h2>
+        <p>
+          <a href="http://docs.mongodb.org/manual/sharding/" target="_blank">MongoDB Sharding</a>
+        </p>
+      </section>
+      <section>
+        <h1>Elastic Search</h1>
+        <h3>In a nutshell</h3>
+      </section>
+      <section>
+        <p>
+          Elastic Search is a document-based <strong>search engine</strong> written in Java and built on top of Apache Lucene.
+        </p>
+      </section>
+      <section>
+        <p>
+          Although Elastic Search's data-model is similar to that of document databases, it is <strong>not a database!</strong>
+        </p>
+      </section>
+      <section>
+        <h2>Notable Features</h2>
+        <ul>
+          <li>JSON based data model with rich data types</li>
+          <li class="fragment roll-in">Full-text indexing</li>
+          <li class="fragment roll-in">Powerful text analysers (NGram, Snowball, Keywords, etc.)</li>
+          <li class="fragment roll-in">Query boosting</li>
+          <li class="fragment roll-in">Facets</li>
+          <li class="fragment roll-in">Query Percolators</li>
+          <li class="fragment roll-in">Clustering</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Some Use Cases:</h2>
+        <ul>
+          <li>Full-text search engine</li>
+          <li class="fragment roll-in">Separation of indexing and data</li>
+          <li class="fragment roll-in">Log analysis (Logstash & Kibana)</li>
+          <li class="fragment roll-in">Dynamic search scoring</li>
+          <li class="fragment roll-in">Auto-complete interfaces</li>
+          <li class="fragment roll-in">Mutliple-indices search</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Further Reading</h2>
+        <p>
+          <a href="http://www.elasticsearch.org/" target="_blank">Elastic Search</a>
+        </p>
+      </section>
+    </div>
   </div>
 
   <script src="./reveal.js/lib/js/head.min.js"></script>
@@ -194,8 +539,7 @@
       progress: true,
       history: true,
       center: true,
-      //width: '100%',
-      //height: '100%',
+      loop: true,
 
       theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
       transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
