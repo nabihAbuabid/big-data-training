@@ -1,4 +1,16 @@
 RecruitMe::Application.routes.draw do
+
+  resources :users, only: [] do
+    get 'friends_with/:id' => 'users#friends_with', on: :collection
+    get 'skilled_at/:skill' => 'users#skilled_at', on: :collection
+    get 'unskilled_at/:skill' => 'users#unskilled_at', on: :collection
+    get 'living_in/:city' => 'users#living_in', on: :collection
+    get 'not_from/:country' => 'users#not_from', on: :collection
+  end
+
+  resources :positions, only: [] do
+    get 'popular_skills' => 'positions#popular_skills', on: :collection
+end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
