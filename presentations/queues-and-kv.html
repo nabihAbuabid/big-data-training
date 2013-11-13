@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Message Queues and Key-Value Stores</title>
+  <meta charset="utf-8"><meta name="description" content="Getting started with Document Databases">
+  <meta name="author" content="Zohar Arad">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="./reveal.js/css/reveal.min.css">
+  <link rel="stylesheet" href="./reveal.js/css/theme/solarized.css" id="theme">
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+    document.write( '<link rel="stylesheet" href="./reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="./reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+
+    <div class="slides">
+
+      <section>
+        <h1>Message Queues &amp; Key/Value Stores</h1>
+        <h3>Big Data Training</h3>
+        <p>
+          <small>Zohar Arad. &copy; 2013</small>
+        </p>
+      </section>
+
+      <section>
+        <h1>Key/Value Stores</h1>
+      </section>
+
+      <section>
+        <h2>Concepts</h2>
+        <ul>
+          <li>Flat hash-map</li>
+          <li class="fragment roll-in">Single Index (key)</li>
+          <li class="fragment roll-in">No query language</li>
+          <li class="fragment roll-in">Basic operations - <strong>get</strong>, <strong>set</strong>, <strong>delete</strong></li>
+          <li class="fragment roll-in">Values are usually data-agnostic</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Some Advantages</h2>
+        <ul>
+          <li>Fast retrieval by key</li>
+          <li class="fragment roll-in">No type validation by engine</li>
+          <li class="fragment roll-in">Simple operation</li>
+          <li class="fragment roll-in">Flexibility (no hard-wired data-model)</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Some Disadvantages</h2>
+        <ul>
+          <li>No data validation</li>
+          <li class="fragment roll-in">Data modelling is in app level (adds complexity)</li>
+          <li class="fragment roll-in">No complex queries - key planning is harder</li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Use Cases</h1>
+      </section>
+
+      <section>
+        <h2>Caching</h2>
+        <ul>
+          <li>Perfect for key/value - no QL required</li>
+          <li class="fragment roll-in">In-Memory K/V stores offer super-fast retrieval</li>
+          <li class="fragment roll-in">High-availability &amp; scaling are a bonus but not a must</li>
+        </ul>
+      </section>
+      <section>
+        <p>
+          <strong>Redis</strong> and <strong>Memcached</strong> are the two natural candidates for caching
+        </p>
+        <ul>
+          <li>In-memory storage</li>
+          <li>TTL support</li>
+          <li>Single-node or cluster configuration</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Single Entity Querying</h2>
+        <ul>
+          <li>Store any data</li>
+          <li class="fragment roll-in">No need for complex queries - Fetch by key only</li>
+          <li class="fragment roll-in">Complex queries are achieved using a separate tool</li>
+          <li class="fragment roll-in">Prefer scalability and high-availability over rich feature set</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>
+          <strong>Riak</strong>, <strong>FoundationDB</strong>, <strong>DynamoDB</strong> and <strong>MemcachDB</strong>
+          are all natural candidates for single-entity data-modelling
+        </p>
+      </section>
+      <section>
+        <p>Let's imagine we want to migrate our blog from MongoDB to DynamoDB</p>
+      </section>
+
+      <section>
+        <h3>DynamoDB Blog</h3>
+        <ul>
+          <li>Model post as JSON</li>
+          <li>Nest comments inside Post document</li>
+          <li>Retrieve post by key</li>
+          <li>Use Elastic Search for searching</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Ordered Entities Querying</h2>
+        <ul>
+          <li>Store any data</li>
+          <li class="fragment roll-in">Fetch by key or key range</li>
+          <li class="fragment roll-in">Related indices can be fetched together</li>
+          <li class="fragment roll-in">Complex queries are achieved using a separate tool</li>
+          <li class="fragment roll-in">Prefer scalability and high-availability over rich feature set</li>
+        </ul>
+      </section>
+
+      <section>
+        <p>
+          <strong>FoundationDB</strong> is an emerging key-value store with support for ordered keys
+        </p>
+      </section>
+
+      <section>
+        <h2>More In-Memory Use Cases</h2>
+        <ul>
+          <li>
+            <strong>Leader Board</strong> using Redis / MemcacheDB counters
+          </li>
+          <li>
+            <strong>Session Store</strong> - Keep application state in persistent short-term memory
+          </li>
+          <li>
+            <strong>Buffer</strong> - Reduce DB writes by buffering data in short-term memory
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Let's take a break</h1>
+      </section>
+
+      <section>
+        <h1>Redis</h1>
+        <h2>The mother of all K/V</h2>
+      </section>
+
+      <section>
+        <h2>Notable Features</h2>
+        <ul>
+          <li>In-Memory with persistence to disk</li>
+          <li class="fragment roll-in">High-Availability (master/master, master/slave clustering)</li>
+          <li class="fragment roll-in">TTL</li>
+          <li class="fragment roll-in">Complex data-types</li>
+          <li class="fragment roll-in">Counters</li>
+          <li class="fragment roll-in">Range scans (?)</li>
+          <li class="fragment roll-in">Pub/Sub</li>
+          <li class="fragment roll-in">Lua scripts</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Use Cases</h2>
+        <ul>
+          <li>Cache layer</li>
+          <li class="fragment roll-in">Session Store</li>
+          <li class="fragment roll-in">Messaging</li>
+          <li class="fragment roll-in">Stateful short-term data-store</li>
+          <li class="fragment roll-in">Nginx Magic *</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+  <script src="./reveal.js/lib/js/head.min.js"></script>
+  <script src="./reveal.js/js/reveal.min.js"></script>
+
+  <script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      center: true,
+      loop: true,
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        // Syntax highlight for <code> elements
+        { src: './reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+    });
+
+  </script>
+</body>
+</html>
