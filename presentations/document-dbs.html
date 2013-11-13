@@ -180,14 +180,6 @@
       </section>
 
       <section>
-        <h2>Getting our hands dirty</h2>
-        <pre><code data-trim class="javascript">
-$ git clone git@github.com:zohararad/big-data-training.git big-data
-$ cd big-data/mongodb
-$ ./install.sh</code></pre>
-      </section>
-
-      <section>
         <h2>Some Basic MongoDB Commands</h2>
       </section>
 
@@ -246,30 +238,30 @@ $ mongo
       </section>
 
       <section>
-        <h2>Advanced Operations</h2>
-        <h4>Let's import some data first...</h4>
-        <pre><code data-trim class="javascript">
-$ cd exports
-$ ./import.sh</code></pre>
+        <h2>Example Application</h2>
+        <h4>Naive Linkedin Clone</h4>
+      </section>
+
+      <section>
+        <h2>Application Data Models</h2>
+        <ul>
+          <li>
+            <strong>User</strong> - skills, employment history and contact details
+          </li>
+          <li>
+            <strong>Position</strong> - required skills, location and details
+          </li>
+        </ul>
       </section>
       <section>
-        <h3>Use Case - Recruitment Application</h3>
-        <p>
-          A collection of users, where each user record includes:
-        </p>
-        <ul>
-          <li>Basic information</li>
-          <li>Address (Hash-based data)</li>
-          <li>List of previous employments - Embedded Documents</li>
-          <li>List of skills</li>
-          <li>List of friends - Array of ObjectIds</li>
-        </ul>
+        <h2>Important!</h2>
+        <p>Please make sure you ran through the installation process described in <em>materials/readme.md</em></p>
       </section>
       <section>
         <h3>Example Record</h3>
         <pre><code data-trim class="javascript">
 $ mongo
-> use recruit-me;
+> use recruit_me_development;
 > show collections;
 > db.users.findOne();
         </code></pre>
@@ -294,7 +286,7 @@ $ mongo
       <section>
         <h3>Running the examples</h3>
         <pre><code data-trim class="javascript">
-$ mongo recruit-me examples/advanced/find_size.js
+$ mongo recruit_me_development examples/advanced/find_size.js
         </code></pre>
       </section>
       <section>
@@ -358,6 +350,10 @@ $ mongo recruit-me examples/advanced/find_size.js
             <a href="http://docs.mongodb.org/manual/core/map-reduce/" target="_blank">Map/Reduce</a>
           </li>
         </ul>
+      </section>
+      <section>
+        <h1>Demo Time</h1>
+        <h2>Finding Users and Skills</h2>
       </section>
       <section>
         <h1>Another Break</h1>
@@ -525,6 +521,10 @@ $ mongo --port 27017
         </p>
       </section>
       <section>
+        <h1>Demo Time</h1>
+        <h2>Search &amp; Auto-Complete</h2>
+      </section>
+      <section>
         <h2>Task 2 - MongoDB Sharding</h2>
         <p>Run a local sharded MongoDB cluster, and shard your imported users table by full name and address</p>
       </section>
@@ -532,10 +532,10 @@ $ mongo --port 27017
         <h2>Task 3 - Elastic Search</h2>
         <ol>
           <li>
-            Install Elastic Search using the installer inside <em>materials/elasticsearch/install.sh</em>
-          </li>
-          <li>
-            Take a few user records from the <em>mongodb/exports</em> folder and index them into Elastic Search using cURL
+            <p>Take a few user records from the <strong>users</strong> collection and index them into Elastic Search using cURL</p>
+            <p>
+              <small>You might want to read a little about <strong>mongoexport</strong> and <strong>mongoimport</strong></small>
+            </p>
           </li>
           <li>
             Query Elastic Search using cURL for the following information:
