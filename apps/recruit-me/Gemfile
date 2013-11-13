@@ -16,6 +16,8 @@ gem 'mongoid', github: 'mongoid/mongoid'
 
 gem 'rest-client'
 
+gem 'tire'
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 

@@ -2,6 +2,9 @@ class User
   include Mongoid::Document
   include Mongoid::Timestamps # adds created_at and updated_at fields
 
+  include Tire::Model::Search
+  include Tire::Model::Callbacks
+
   field :firstname, type: String
   field :lastname,  type: String
   field :email,     type: String

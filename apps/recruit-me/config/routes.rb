@@ -10,7 +10,13 @@ RecruitMe::Application.routes.draw do
 
   resources :positions, only: [] do
     get 'popular_skills' => 'positions#popular_skills', on: :collection
-end
+  end
+
+  resource :search, only: [] do
+    get ':index' => 'search#search', on: :collection
+    get ':index/autocomplete' => 'search#autocomplete', on: :collection
+  end
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
