@@ -11,8 +11,9 @@ $ git clone git@github.com:zohararad/big-data-training.git big-data
 $ cd materials
 $ mongodb/install-mongo.sh
 $ elasticsearch/install-elasticsearch.sh
-$ rails/install-rvm.sh
-$ rails/install-ruby.sh
+$ cd rails
+$ ./install-rvm.sh
+$ ./install-ruby.sh
 ```
 
 The above will
