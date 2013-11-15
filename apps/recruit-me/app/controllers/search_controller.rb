@@ -1,5 +1,7 @@
 class SearchController < ApplicationController
 
+  after_action :count_searches, only: [:search]
+
   def search
     index = params[:index]
     query = params[:q]
@@ -26,6 +28,13 @@ class SearchController < ApplicationController
     render json: search.results.as_json(only: [:location]).uniq
   end
 
+  def popular
+    searches = PopularSearch.all.to_a.sort do |a, b|
+      b.views <=> a.views
+    end
+    render json: searches.collect{|s| s.to_json }
+  end
+
   private
 
   def search_by_index(index, query, sort)
@@ -44,4 +53,12 @@ class SearchController < ApplicationController
       s.sort { by field, :asc }
     end
   end
+
+  def count_searches
+    params[:q].each do |key, value|
+      pos = PopularSearch.find(name: key, value: value).first || PopularSearch.create(name: key, value: value)
+      pos.incr :views, 1
+    end
+  end
+
 end

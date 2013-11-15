@@ -18,6 +18,9 @@ gem 'rest-client'
 
 gem 'tire'
 
+gem 'ohm'
+gem 'ohm-expire', require: "ohm/expire"
+
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 # gem 'therubyracer', platforms: :ruby
 
