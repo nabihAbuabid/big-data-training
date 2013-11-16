@@ -13,6 +13,7 @@ RecruitMe::Application.routes.draw do
   end
 
   resource :search, only: [] do
+    get 'popular' => 'search#popular', on: :collection
     get ':index' => 'search#search', on: :collection
     get ':index/autocomplete' => 'search#autocomplete', on: :collection
   end

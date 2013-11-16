@@ -72,6 +72,14 @@ GEM
       bson (~> 2.0.0.rc3)
       optionable (~> 0.1.1)
     multi_json (1.8.2)
+    nest (1.1.2)
+      redis
+    ohm (1.3.2)
+      nest (~> 1.0)
+      redis
+      scrivener (~> 0.0.3)
+    ohm-expire (0.1.3.2)
+      ohm (>= 0.1.5)
     optionable (0.1.1)
     origin (1.1.0)
     polyglot (0.3.3)
@@ -96,6 +104,7 @@ GEM
     rake (10.1.0)
     rdoc (3.12.2)
       json (~> 1.4)
+    redis (3.0.6)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rspec-core (2.14.7)
@@ -114,6 +123,7 @@ GEM
       railties (>= 4.0.0, < 5.0)
       sass (>= 3.1.10)
       sprockets-rails (~> 2.0.0)
+    scrivener (0.0.3)
     sdoc (0.3.20)
       json (>= 1.1.3)
       rdoc (~> 3.10)
@@ -157,6 +167,8 @@ DEPENDENCIES
   jbuilder (~> 1.2)
   jquery-rails
   mongoid!
+  ohm
+  ohm-expire
   puma
   rails (= 4.0.1)
   rest-client
