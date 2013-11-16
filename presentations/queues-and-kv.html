@@ -189,6 +189,266 @@
           <li class="fragment roll-in">Nginx Magic *</li>
         </ul>
       </section>
+      <section>
+        <h1>Riak</h1>
+      </section>
+
+      <section>
+        <h2>Notable Features</h2>
+        <ul>
+          <li>Scalable &amp; Highly-available</li>
+          <li class="fragment roll-in">Master-less, distributed architecture</li>
+          <li class="fragment roll-in">Secondary Indices</li>
+          <li class="fragment roll-in">Pluggable storage engine</li>
+          <li class="fragment roll-in">Eventually consistent (A,P)</li>
+          <li class="fragment roll-in">Map/Reduce support in Erlang / Javascript</li>
+          <li class="fragment roll-in">Linkable documents</li>
+          <li class="fragment roll-in">Searchable data</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Some Use Cases</h2>
+        <ul>
+          <li>
+            Low-latency read/write
+            <ul>
+              <li class="fragment roll-in">Cache Layer (Ideeli use case)</li>
+              <li class="fragment roll-in">Session Storage</li>
+              <li class="fragment roll-in">Awareness of data-types (user preferences)</li>
+            </ul>
+          </li>
+          <li class="fragment roll-in">
+            Complex queries (secondary indices)
+            <ul>
+              <li class="fragment roll-in">Find articles by id or category</li>
+              <li class="fragment roll-in">Find ads by id or campaign</li>
+            </ul>
+          </li>
+          <li class="fragment roll-in">
+            Data relationships (difference with SQL Joins)
+            <ul>
+              <li class="fragment roll-in">Data ownership (which user uploaded that image?)</li>
+              <li class="fragment roll-in">Meta data (movie actors and actresses</li>
+              <li class="fragment roll-in"><strong>Not a graph DB</strong></li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
+      <section>
+        <h1>Hands-on Time</h1>
+      </section>
+
+      <section>
+        <p>Let's install Redis</p>
+        <pre><code data-trim class="bash">
+$ sudo apt-get install redis-server</code></pre>
+      </section>
+
+      <section>
+        <h2>Redis CLI</h2>
+        <pre><code data-trim class="bash">
+$ redis-cli
+> help</code></pre>
+      </section>
+
+      <section>
+        <h3>Redis Leader Board</h3>
+        <p>Run the demo app</p>
+        <pre><code data-trim class="bash">
+$ cd apps/recruit-me
+$ rails s</code></pre>
+      </section>
+      <section>
+        <h3>Redis Leader Board</h3>
+        <p>
+          Search for
+          <a href="http://localhost:3000/search/positions?q[skills]=MongoDB&sort=company.asc" target="_blank">MongoDB positions</a>
+          and for
+          <a href="http://localhost:3000/search/positions?q[location]=Burbank&sort=updated_at.desc" target="_blank">positions in Burbank</a>
+        </p>
+        <hr />
+        <p>
+          Now check out the <a href="http://localhost:3000/search/popular" target="_blank">leader board</a>
+        </p>
+      </section>
+      <section>
+        <h3>Redis Leader Board</h3>
+        <pre><code data-trim class="bash">
+$ redis-cli
+> keys *
+> HGETALL PopularSearch:1
+> HINCRBY PopularSearch:1:counters views 3</code></pre>
+        <hr />
+        <p>Now reload the leader board</p>
+      </section>
+      <section>
+        <h3>Trying out Redis for yourself</h3>
+        <ul>
+          <li>Open the <a href="http://redis.io/commands" target="_blank">Redis Commands</a> page</li>
+          <li>Create a key with an integer value</li>
+          <li>Increment and decrement that key's value</li>
+          <li>Create a hash and repeat the above</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Trying out Redis for yourself</h3>
+        <ul>
+          <li>Create a list and add some values to it</li>
+          <li>Get the first and last values of that list</li>
+          <li>Get the first two values of that list</li>
+          <li>Create a union of two sets of numbers</li>
+        </ul>
+      </section>
+      <section>
+        <h1>Break</h1>
+      </section>
+      <section>
+        <h1>Message Queues</h1>
+      </section>
+      <section>
+        <h2>Sync vs. Async</h2>
+        <ul>
+          <li>Not all computations were created equal</li>
+          <li class="fragment roll-in">Some things take more time</li>
+          <li class="fragment roll-in">We don't always need results right away</li>
+          <li class="fragment roll-in">We want to decouple components</li>
+          <li class="fragment roll-in">We need some guarantees for processing</li>
+          <li class="fragment roll-in">We want to run stuff in parallel</li>
+        </ul>
+      </section>
+      <section>
+        <p>
+          Message queues are a mechanism to communicate <strong>asynchronously</strong> between components of a <strong>distributed system</strong>.
+        </p>
+      </section>
+      <section>
+        <figure>
+          <img src="http://www.rabbitmq.com/img/tutorials/intro/hello-world-example-routing.png" />
+          <figcaption>
+            <small>Source: rabbitmq.com</small>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h3>Queue Components</h3>
+        <ul>
+          <li>
+            <strong>Broker</strong> - Message Queue service provider
+          </li>
+          <li>
+            <strong>Publisher</strong> - Sends messages to the queue
+          </li>
+          <li>
+            <strong>Consumer</strong> - Reads messages from the queue
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h2>Message Routing</h2>
+        <h4>RabbitMQ Exchanges</h4>
+      </section>
+      <section>
+        <h2>Direct Exchange</h2>
+        <figure>
+          <img src="http://www.rabbitmq.com/img/tutorials/intro/exchange-direct.png" />
+          <figcaption>
+            <small>Source: rabbitmq.com</small>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h2>Fanout Exchange</h2>
+        <figure>
+          <img src="http://www.rabbitmq.com/img/tutorials/intro/exchange-fanout.png" />
+          <figcaption>
+            <small>Source: rabbitmq.com</small>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h2>Topic Exchange</h2>
+        <p>
+          Hybrid between Fanout and Direct. Routes messages by key patterns
+        </p>
+      </section>
+      <section>
+        <h2>Use Cases</h2>
+        <ul>
+          <li>Javascript Events / PubSub Patterns (huh?)</li>
+          <li class="fragment roll-in">Background Processing (Sidekiq)</li>
+          <li class="fragment roll-in">Non-blocking execution (scaling)</li>
+          <li class="fragment roll-in">Parallel Execution (Sensu, Salt)</li>
+          <li class="fragment roll-in">Inter-service communication (Hutch, Storm)</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Let's talk about RabbitMQ</h2>
+      </section>
+      <section>
+        <ul>
+          <li>Written in Erlang</li>
+          <li class="fragment roll-in">Works with AMQP, STOMP</li>
+          <li class="fragment roll-in">High-availability through mirroring</li>
+          <li class="fragment roll-in">Scalability through clustering</li>
+          <li class="fragment roll-in">Reliability through persistence and acks</li>
+          <li class="fragment roll-in">Plugin system</li>
+          <li class="fragment roll-in">Clients in <cite>almost any language you can think of</cite></li>
+          <li class="fragment roll-in">Orange logo!</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Let's talk about Redis</h2>
+      </section>
+      <section>
+        <ul>
+          <li>Supports simple pub/sub paradigm</li>
+          <li class="fragment roll-in">Messages are published to channels</li>
+          <li class="fragment roll-in">Subscribers can listen to messages on a channel</li>
+          <li class="fragment roll-in">Publishers and send messages on a channel</li>
+          <li class="fragment roll-in">No ack / delivery guarantee</li>
+          <li class="fragment roll-in">Great for simple / light-weight messaging use-cases</li>
+          <li class="fragment roll-in">Resque / Sidekiq use-cases</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Let's talk about Kafka</h2>
+      </section>
+      <section>
+        <ul>
+          <li>Topic based pub-sub</li>
+          <li class="fragment roll-in">Scalable, highly-available and fault-tolerant</li>
+          <li class="fragment roll-in">Message ordering guarantee</li>
+          <li class="fragment roll-in">Message durability using log files(supports replay)</li>
+          <li class="fragment roll-in">Suitable for both real-time and batch</li>
+          <li class="fragment roll-in">
+            Use cases include
+            <ul>
+              <li>Log Aggregation</li>
+              <li>Stream Processing</li>
+              <li>Operation Monitoring</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+      <section>
+        <h3>Getting our hands dirty</h3>
+        <hr />
+        <h5>Install Zookeeper</h5>
+        <pre><code data-trim class="bash">$ sudo apt-get install zookeeper</code></pre>
+        <hr />
+        <p>
+          Follow the quick-start tutorial on
+          <a href="http://kafka.apache.org/documentation.html#quickstart" target="_blank">Kafka's Documentation</a> page.
+        </p>
+      </section>
+      <section>
+        <h3>A bit more dirt...</h3>
+        <p>
+          Read about <a href="http://redis.io/topics/pubsub" target="_blank">Redis Pub/Sub</a>, set up a simple channel, and publish some messages on it.
+        </p>
+      </section>
     </div>
   </div>
   <script src="./reveal.js/lib/js/head.min.js"></script>
