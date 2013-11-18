@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Storm - Real Time Computations</title>
+  <meta charset="utf-8"><meta name="description" content="Getting started with Document Databases">
+  <meta name="author" content="Zohar Arad">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="./reveal.js/css/reveal.min.css">
+  <link rel="stylesheet" href="./reveal.js/css/theme/solarized.css" id="theme">
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+    document.write( '<link rel="stylesheet" href="./reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="./reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <section>
+        <h1>Storm</h1>
+        <h3>Big Data Training</h3>
+        <p>
+          <small>Zohar Arad. &copy; 2013</small>
+        </p>
+      </section>
+      <section>
+        <p>
+          Storm is a distributed, real-time, data processing framework written in Java & Clojure
+        </p>
+      </section>
+      <section>
+        <p>
+          Storm tries to solve the problem of performing successive computations on massive amounts of data
+        </p>
+        <hr />
+        <p>Some use cases include real-time analytics, online machine learning and continuous computation</p>
+      </section>
+      <section>
+        <h2>Storm Topology</h2>
+        <p>A collection of arbitrary computation units (called bolts) that consumes and processes streams of data</p>
+      </section>
+      <section>
+        <h2>Storm Topology</h2>
+        <figure>
+          <img src="http://storm-project.net/images/topology.png" />
+          <figcaption>
+            <p><small>Source: storm-project.net</small></p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h2>Topology Bolts</h2>
+        <ul>
+          <li>Bolts are computation units inside a storm topology</li>
+          <li>Bolts receive data as messages formatted as tuples</li>
+          <li>Each bolt is responsible for a single computation task</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Topology Spouts</h2>
+        <ul>
+          <li>Spouts act as the data-stream source for a topology</li>
+          <li>A topology can have many spouts</li>
+          <li>A spout can feed data-streams to many bolts (computation units)</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Spout Implementations</h2>
+        <ul>
+          <li>Kafka</li>
+          <li>SQS</li>
+          <li>Redis Pub/Sub</li>
+          <li>Mongo</li>
+          <li>JMS</li>
+          <li>Many more in <a href="https://github.com/nathanmarz/storm-contrib" target="_blank">Storm Contrib.</a></li>
+        </ul>
+      </section>
+      <section>
+        <h2>Topology Streams</h2>
+        <ul>
+          <li>Streams are the carriers of data inside a topology</li>
+          <li>You might think of them as MQ channels</li>
+          <li>Bolts can receive data from many streams</li>
+          <li>Bolts can emit data on many streams</li>
+        </ul>
+      </section>
+      <section>
+        <p>
+          The arrangement of spouts, bolts and streams forms a Storm topology
+        </p>
+        <hr />
+        <p>
+          Think of a topology as a river (data-stream), with many mills on its banks, where each mill
+          performs a unique process.
+        </p>
+      </section>
+      <section>
+        <h2>Stream Grouping</h2>
+        <p>Defines each bolt's input streams as well as how each stream is partitioned among bolt tasks</p>
+      </section>
+      <section>
+        <h2>Stream Grouping</h2>
+        <ul>
+          <li>
+            <strong>Shuffle Grouping</strong> - random, even distribution of tuple across bolt tasks
+          </li>
+          <li>
+            <strong>Field Grouping</strong> - stream tuples are partitioned by pre-defined tuple field. Example user ID.
+          </li>
+          <li>
+            <strong>All Grouping</strong> - stream tuples are replicated among all bolt tasks
+          </li>
+        </ul>
+        <hr />
+        <p>
+          <small>Read more about grouping in the <a href="https://github.com/nathanmarz/storm/wiki/Concepts" target="_blank">Storm Concepts</a> page.</small>
+        </p>
+      </section>
+      <section>
+        <h3>Word Counting Topology</h3>
+        <ul>
+          <li>
+            <strong>Spout</strong> - produce random sentences
+          </li>
+          <li>
+            <strong>Word Splitting Bolt</strong> - split sentences into words
+          </li>
+          <li>
+            <strong>Word Counter</strong> - count the occurrence‎ of each word
+          </li>
+        </ul>
+      </section>
+      <section>
+        <p>Let's take a look at the word-count topology, noting:</p>
+        <ul>
+          <li>Bolt and Spout structure</li>
+          <li>Acking</li>
+          <li>Grouping</li>
+          <li>Topology configuration and grouping</li>
+          <li>Topology local mode</li>
+        </ul>
+      </section>
+      <section>
+        <h1>Break</h1>
+      </section>
+      <section>
+        <h2>Storm Architecture</h2>
+        <h4>Components, Workers and Tasks</h4>
+      </section>
+      <section>
+        <h2>Storm Cluster Components</h2>
+        <ul>
+          <li>
+            <strong>Nimbus</strong> - responsible for code distribution, task assignment and monitoring for failures
+          </li>
+          <li>
+            <strong>Supervisor</strong> - receives work from Nimbus, starts and stops worker processes as necessary
+          </li>
+          <li>
+            <strong>Worker</strong> - Java process controlled by <strong>Supervisor</strong> that runs topology code
+          </li>
+          <li>
+            <strong>Executor</strong> - Java thread controlled by <strong>Worker</strong> that executes bolt code
+          </li>
+          <li>
+            <strong>Zookeeper Quorum</strong> - Stores topology state and coordinates between Nimbus and Supervisors
+          </li>
+        </ul>
+      </section>
+      <section>
+        <figure>
+          <img src="http://www.jansipke.nl/wp-content/uploads/storm-cluster.png">
+          <figcaption>
+            <small>Source: www.jansipke.nl</small>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h2>Storm Streams Revisited</h2>
+        <p>
+          Streams are a core concept in Storm, in the sense that they provide logical separation of data processing channels.
+        </p>
+      </section>
+      <section>
+        <h2>Storm Streams Revisited</h2>
+        <p>
+          by default, tuples are emitted on a default stream.
+        </p>
+        <p>
+          However, each bolt can define which streams it can emit tuples on,
+          and what fields that tuple includes.
+        </p>
+      </section>
+      <section>
+        <h2>Storm Streams Revisited</h2>
+        <figure>
+          <img src="img/bolt-streams.png" />
+        </figure>
+      </section>
+      <section>
+        <h3>Task 1 - Search History</h3>
+        <p>Create a topology with the following components:</p>
+        <ol>
+          <li>Search Phrase spout</li>
+          <li>Phrase counter bolt</li>
+          <li>Phrase aggregator bolt by user ID</li>
+        </ol>
+        <hr />
+        <p>
+          <small>At the end of this stage, you should be able to know your visitor search history</small>
+        </p>
+      </section>
+      <section>
+        <h3>Task 2 - Related Searches</h3>
+        <p>
+          Modify your bolt to also aggregate related search phrases<br />(users who searched for "this", also searched for "that")
+        </p>
+        <hr />
+        <p>
+          <small>Let's try and keep things <strong>simple</strong> - Use hash tables rather than complex algorithms</small>
+        </p>
+      </section>
+      <section>
+        <h1>Break</h1>
+      </section>
+      <section>
+        <h2>Storm DRPC</h2>
+        <p>
+          Storm provides a facility to execute remote procedure calls on a topology
+        </p>
+      </section>
+      <section>
+        <figure>
+          <img src="https://github.com/nathanmarz/storm/wiki/images/drpc-workflow.png" />
+          <figcaption>
+            <p>
+              <small>Source: github.com/nathanmarz/storm/wiki</small>
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <p>One of the key principles of using DRPC in Storm, is issuing DRPC calls on a separate stream</p>
+        <hr />
+        <p>
+          Let's go through the code and see how that works.
+        </p>
+      </section>
+      <section>
+        <p>
+          Read some more about <a href="https://github.com/nathanmarz/storm/wiki/Distributed-RPC" target="_blank">Storm DRPC</a>
+        </p>
+      </section>
+      <section>
+        <h3>Better DRPC with Trident</h3>
+        <p>
+          Storm Trident is an abstraction layer on top of Storm, for doing real-time computations and querying.
+        </p>
+      </section>
+      <section>
+        <p>
+          Trident hides some of the complexities of querying distributed data and is the recommended way to perform real-time aggregations and queries in Storm
+        </p>
+      </section>
+      <section>
+        <p>You should check it out on the Storm Trident <a href="https://github.com/nathanmarz/storm/wiki/Trident-tutorial" target="_blank">Wiki page</a></p>
+      </section>
+      <section>
+        <h3>Task 3</h3>
+        <p>Implement DRPC querying in your topology either using Trident, or with manual DRPC</p>
+      </section>
+    </div>
+  </div>
+  <script src="./reveal.js/lib/js/head.min.js"></script>
+  <script src="./reveal.js/js/reveal.min.js"></script>
+
+  <script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      center: true,
+      loop: true,
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        // Syntax highlight for <code> elements
+        { src: './reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+      ]
+    });
+
+  </script>
+</body>
+</html>
