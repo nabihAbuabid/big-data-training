@@ -160,24 +160,24 @@
         <h4>Components, Workers and Tasks</h4>
       </section>
       <section>
-        <h2>Storm Cluster Components</h2>
-        <ul>
-          <li>
-            <strong>Nimbus</strong> - responsible for code distribution, task assignment and monitoring for failures
-          </li>
-          <li>
-            <strong>Supervisor</strong> - receives work from Nimbus, starts and stops worker processes as necessary
-          </li>
-          <li>
-            <strong>Worker</strong> - Java process controlled by <strong>Supervisor</strong> that runs topology code
-          </li>
-          <li>
-            <strong>Executor</strong> - Java thread controlled by <strong>Worker</strong> that executes bolt code
-          </li>
-          <li>
-            <strong>Zookeeper Quorum</strong> - Stores topology state and coordinates between Nimbus and Supervisors
-          </li>
-        </ul>
+        <h3>Nimbus</h3>
+        <p>Responsible for code distribution, task assignment and monitoring for failures</p>
+      </section>
+      <section>
+        <h3>Supervisor</h3>
+        <p>Receives work from Nimbus, starts and stops worker processes as necessary</p>
+      </section>
+      <section>
+        <h3>Worker</h3>
+        <p>Java process controlled by <strong>Supervisor</strong> that runs topology code</p>
+      </section>
+      <section>
+        <h3>Executor</h3>
+        <p>Java thread controlled by <strong>Worker</strong> that executes bolt code</p>
+      </section>
+      <section>
+        <h3>Zookeeper</h3>
+        <p>Stores topology state and coordinates between Nimbus and Supervisors</p>
       </section>
       <section>
         <figure>
