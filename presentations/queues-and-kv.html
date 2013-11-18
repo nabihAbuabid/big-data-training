@@ -468,11 +468,21 @@ $ redis-cli
       theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
       transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
 
+      multiplex: {
+        // Example values. To generate your own, see the socket.io server instructions.
+        secret: '', // Obtained from the socket.io server. Gives this (the master) control of the presentation
+        id: '', // Obtained from socket.io server
+        url: 'localhost:1948' // Location of your socket.io server
+      },
       // Optional libraries used to extend on reveal.js
       dependencies: [
         { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
         // Syntax highlight for <code> elements
-        { src: './reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } }
+        { src: './reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        // socket.io for multiplex
+        { src: '//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js', async: true },
+        //{ src: './reveal.js/plugin/multiplex/master.js', async: true },
+        { src: './reveal.js/plugin/multiplex/client.js', async: true }
       ]
     });
 
