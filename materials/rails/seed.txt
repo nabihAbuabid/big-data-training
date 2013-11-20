@@ -1,0 +1,7 @@
+cd apps/recruit-me
+bundle #install project ruby dependencies
+rake db:seed #seed mongo DB
+rake environment tire:import:all #import data into Elastic Search
+rails s #run rails project
+
+open http://localhost:3000/search/positions/autocomplete?q[location]=Bu
