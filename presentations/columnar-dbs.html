@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+
+  <title>Column-Oriented Databases</title>
+
+  <meta name="description" content="Getting started with Document Databases">
+  <meta name="author" content="Zohar Arad">
+
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <link rel="stylesheet" href="./reveal.js/css/reveal.min.css">
+  <link rel="stylesheet" href="./reveal.js/css/theme/solarized.css" id="theme">
+
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="./reveal.js/lib/css/zenburn.css">
+
+  <!-- If the query includes 'print-pdf', use the PDF print sheet -->
+  <script>
+    document.write( '<link rel="stylesheet" href="./reveal.js/css/print/' + ( window.location.search.match( /print-pdf/gi ) ? 'pdf' : 'paper' ) + '.css" type="text/css" media="print">' );
+  </script>
+
+  <!--[if lt IE 9]>
+  <script src="./reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+
+    <div class="slides">
+      <section>
+        <h1>Columnar Databases</h1>
+        <h3>Big Data Training</h3>
+        <p>
+          <small>Zohar Arad. &copy; 2013</small>
+        </p>
+      </section>
+      <section>
+        <h2>A bit of theory</h2>
+      </section>
+      <section>
+        <p>Wide-Column databases try to tackle the pains of disk I/O when dealing with large amounts of data</p>
+      </section>
+      <section>
+        <p>Row-storage engines store each row on the same disk-space</p>
+        <hr />
+        <p>Therefore they work best when fetching all row data at once (row columns are stored together)</p>
+      </section>
+      <section>
+        <p>But, what if we want to operate on only one column of the row?</p>
+        <hr />
+        <p>For example: <em>"SELECT email FROM users WHERE id=6"</em></p>
+      </section>
+      <section>
+        <p>Row-storage engines will still fetch the entire row from disk</p>
+        <hr />
+        <p>When we're dealing with large amounts of data, this is very wasteful and expensive</p>
+      </section>
+      <section>
+        <p>In contrast, Wide-column engines store each column on the same disk-space</p>
+        <hr />
+        <p>So, when working on a subset of the entire row, they are able to reduce I/O dramatically</p>
+      </section>
+      <section>
+        <p>
+          Coupled with data compression strategies, column-storage<br />
+          engines are more efficient at storing and retrieving<br />
+          subsets of large data.
+        </p>
+      </section>
+      <section>
+        <figure>
+          <img src="http://kejserbi.files.wordpress.com/2012/07/image_thumb2.png?w=600&h=390">
+          <figcaption>
+            <p>
+              <small>Source: blog.kejser.org/2012/07/04/how-do-column-stores-work</small>
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h3>Quick Recap - Row Stores</h3>
+        <ul>
+          <li>Reading small portion of table, but often most columns</li>
+          <li>Data changes frequently</li>
+          <li>Data fits in RAM</li>
+          <li>Suitable for smaller data-sets in real-time</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Quick Recap - Column Stores</h3>
+        <ul>
+          <li>Reading larger portion of data on smaller subset of columns</li>
+          <li>Data changes infrequently (expensive row updates)</li>
+          <li>Bigger data sets</li>
+          <li>Usually suitable for offline / batch</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Breath...</h2>
+      </section>
+      <section>
+        <h2>Data Model</h2>
+        <p>
+          In simplistic terms, columnar data-stores can be thought of as<br /><strong>A hash table of hash-tables</strong>
+        </p>
+      </section>
+      <section>
+        <p>
+          Each hash-table within the top-level space is called a<br /><strong>column-family</strong> and contains one or more columns.
+        </p>
+      </section>
+      <section>
+        <p>
+          Data is stored within column cells and is resolved to<br /><strong>table:column-family:column-qualifier</strong>
+        </p>
+      </section>
+      <section>
+        <pre><code data-trim class="javascript">
+{
+  "info": {
+    "name":"Jack Sparrow",
+    "rank":"Captain",
+    "enemies": "Black Beard, Davie Jones"
+  },
+  "ship": {
+    "name":"Black Pearl",
+    "seaWorthy": 1
+  }
+}
+        </code></pre>
+      </section>
+      <section>
+        <h1>Break!</h1>
+      </section>
+      <section>
+        <h1>Apache Cassandra</h1>
+      </section>
+      <section>
+        <h2>Notable Features</h2>
+        <ul>
+          <li>Written in Java</li>
+          <li>Distributed, highly-available, partition-tolerant</li>
+          <li>Nodes communicate over Gossip</li>
+          <li>Tunable read and write consistency level</li>
+          <li>Mutli-DC, async, masterless replication</li>
+          <li>Secondary indices</li>
+          <li>M/R support via Hadoop, Hive, Pig integration</li>
+          <li>CQL support</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Cluster Architecture</h3>
+        <figure>
+          <img src="http://www.datastax.com/docs/_images/write_access.png">
+          <figcaption>
+            <p>
+              <small>Source: www.datastax.com</small>
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h3>Write Consistency</h3>
+        <p>
+          Write consistency level is the number of nodes in a replica
+          that successfully wrote the data, for the data to be considered consistent
+        </p>
+      </section>
+      <section>
+        <h3>Read Consistency</h3>
+        <p>
+          Read consistency level is the number of nodes in a replica
+          that are contacted during reads.
+        </p>
+        <p>
+          Read data is compared in memory by coordinator and conflicts are resolved using timestamps
+        </p>
+      </section>
+      <section>
+        <h3>Read Repairs</h3>
+        <p>
+          In addition to direct read requests, read-repairs are background read requests sent to nodes to ensure data consistency
+        </p>
+      </section>
+      <section>
+        <p>Read more about <a href="http://www.datastax.com/docs/0.8/cluster_architecture/about_client_requests" target="_blank">Cassandra Client Requests</a> </p>
+      </section>
+      <section>
+        <h3>Data Model - Keyspaces</h3>
+        <ul>
+          <li>Group columns together</li>
+          <li>Basis of replication</li>
+          <li>Usually one per application</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Data Model - Column Families</h3>
+        <ul>
+          <li>Similar to tables in RDBMS (though conceptually different)</li>
+          <li>Static or Dynamic</li>
+          <li>Should contain a single type of data</li>
+          <li>Counters need a seprate counter-only family</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Data Model - Columns</h3>
+        <ul>
+          <li>Smallest increment of data</li>
+          <li>Tuple of name, value and timestamp</li>
+          <li>Supports TTL</li>
+          <li>Data types include blob, text, timestamp, uuid, boolean, int, float, decimal, double, counter</li>
+        </ul>
+      </section>
+      <section>
+        <figure>
+          <img src="http://www.datastax.com/docs/_images/cassandra_model.png">
+          <figcaption>
+            <p>
+              <small>Source: www.datastax.com</small>
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <p>
+          Read more about <a href="http://www.datastax.com/docs/0.8/ddl/index#data-model" target="_blank">Cassandra's Data Model</a>
+        </p>
+      </section>
+      <section>
+        <h3>Some Pitfalls</h3>
+        <ul>
+          <li>Read-Repair sent to all DCs</li>
+          <li>Row-Cache stores full rows. Invalidates entire row on write</li>
+          <li>Compression can disable fast reads</li>
+          <li>Performance can worsen over time as row spreads over multi-SSTables</li>
+          <li>Slow nodes create read-queue bottle-neck in Coordinator</li>
+          <li>VNode overload due to poor partitioning</li>
+        </ul>
+      </section>
+      <section>
+        <p>Read more about <a href="http://www.slideshare.net/planetcassandra/8-axel-liljencrantz-23204252" target="_blank">Cassandra use-case at Spotify</a></p>
+      </section>
+      <section>
+        <h3>Some Use Cases</h3>
+        <ul>
+          <li>Time-Series - <a href="http://www.datastax.com/dev/blog/metric-collection-and-storage-with-cassandra" target="_blank">Read More</a> </li>
+          <li>High write throughput (tunable consistency)</li>
+          <li>Single entity queries (no range scans required)</li>
+          <li>When key queries aren't enough (secondary indices)</li>
+        </ul>
+      </section>
+      <section>
+        <h1>Break</h1>
+      </section>
+      <section>
+        <h1>Apache HBase</h1>
+      </section>
+      <section>
+        <h2>Notable Features</h2>
+        <ul>
+          <li>Written in Java</li>
+          <li>Uses Hadoop as underlying file-system</li>
+          <li>Consistent, partition-tolerant, highly-available and horizontally scalable</li>
+          <li>Soft SPOF with single HMaster</li>
+          <li>Native support for M/R on top of Hadoop</li>
+          <li>Server-side data filtering</li>
+          <li>Range scans &amp; bulk gets</li>
+        </ul>
+      </section>
+      <section>
+        <h2>Cluster Architecture</h2>
+      </section>
+      <section>
+        <h3>Region</h3>
+        <ul>
+          <li>Hbase's basic unit of scalability</li>
+          <li>A subset of the table’s data</li>
+          <li>A contiguous, sorted range of rows that are stored together</li>
+          <li>Split as data grows</li>
+        </ul>
+        <figure>
+          <img src="https://lh3.googleusercontent.com/NoQlIlCSHp9O3iMvuJtwaGOPgycvBWxgT2K2cmCljtH4rGEs9Ya-_JQoKNaVgK2XbuNeD_MDecDHaVm5M_auxobvANwsRKPKJ4O2xeaT7x34iwaInAlmfIj61g">
+          <figcaption>
+            <p>
+              <small>Source: blogs.apache.org/hbase</small>
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h3>Region Servers</h3>
+        <ul>
+          <li>Responsible for serving a set of regions</li>
+          <li>Run on top of Hadoop Data Node</li>
+          <li>Each region is assigned to one Region Server</li>
+          <li>Clients do not need master to get data from Region Server</li>
+        </ul>
+      </section>
+      <section>
+        <h3>HMaster</h3>
+        <ul>
+          <li>Admin operations</li>
+          <li>Region coordination</li>
+          <li>Region assignment in case of Region Server failure</li>
+        </ul>
+      </section>
+      <section>
+        <figure>
+          <img src="http://image.slidesharecdn.com/hbaseforarchitects-pptx-130528133629-phpapp02/95/slide-9-638.jpg?1369772083">
+          <figcaption>
+            <p>
+              <small>Source: www.slideshare.net/xefyr/h-base-for-architectspptx</small>
+            </p>
+          </figcaption>
+        </figure>
+      </section>
+      <section>
+        <h3>Data Model</h3>
+        <p>
+          HBase stores data in tables, containing rows of multiple columns, grouped into column families.
+        </p>
+        <hr />
+        <p>
+          Optionally, tables can be logically grouped into namespaces. If no namespace is provided, the namespace "default" is used.
+        </p>
+      </section>
+      <section>
+        <h3>Data Model</h3>
+        <p>
+          HBase supports only two data types - Byte array and Counter.
+        </p>
+      </section>
+      <section>
+        <h3>Data Model</h3>
+        <p>
+          Cell data is versioned and timestamped.
+        </p>
+        <hr />
+        <p>
+          This means that a single cell can contain multiple version of data.
+        </p>
+      </section>
+      <section>
+        <h3>Data Model</h3>
+        <p>
+          Data operations are done against the qualified path to a table cell: <em>key:family:column:ts</em>
+        </p>
+      </section>
+      <section>
+        <h3>Some Pitfalls</h3>
+        <ul>
+          <li>Complex setup and admin - many moving parts</li>
+          <li>Soft SPOF due to single master failure</li>
+          <li>Hot regions due to badly-planned keys</li>
+          <li>Hadoop / HBase version conflicts</li>
+          <li>Java dependency hell</li>
+        </ul>
+      </section>
+    </div>
+  </div>
+
+  <script src="./reveal.js/lib/js/head.min.js"></script>
+  <script src="./reveal.js/js/reveal.min.js"></script>
+
+  <script>
+
+    // Full list of configuration options available here:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      center: true,
+      loop: true,
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'default', // default/cube/page/concave/zoom/linear/fade/none
+
+      multiplex: {
+        // Example values. To generate your own, see the socket.io server instructions.
+        secret: '', // Obtained from the socket.io server. Gives this (the master) control of the presentation
+        id: '', // Obtained from socket.io server
+        url: 'localhost:1948' // Location of your socket.io server
+      },
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+        { src: './reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        // Syntax highlight for <code> elements
+        { src: './reveal.js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+        // socket.io for multiplex
+        { src: '//cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.10/socket.io.min.js', async: true },
+        //{ src: './reveal.js/plugin/multiplex/master.js', async: true },
+        { src: './reveal.js/plugin/multiplex/client.js', async: true }
+      ]
+    });
+
+  </script>
+</body>
+</html>
