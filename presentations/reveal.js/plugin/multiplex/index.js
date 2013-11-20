@@ -10,7 +10,8 @@ io				= io.listen(app);
 
 var opts = {
 	port: 1948,
-	baseDir : __dirname + '/../../'
+	baseDir : __dirname + '/../../',
+  htmlDir: __dirname + '/../../..'
 };
 
 io.sockets.on('connection', function(socket) {
@@ -25,13 +26,14 @@ io.sockets.on('connection', function(socket) {
 
 app.configure(function() {
 	[ 'css', 'js', 'plugin', 'lib' ].forEach(function(dir) {
-		app.use('/' + dir, staticDir(opts.baseDir + dir));
+		app.use('/reveal.js/' + dir, staticDir(opts.baseDir + dir));
 	});
+  app.use('/img', staticDir(opts.htmlDir + '/img'))
 });
 
-app.get("/", function(req, res) {
+app.get("/:name.html", function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/html'});
-	fs.createReadStream(opts.baseDir + '/index.html').pipe(res);
+	fs.createReadStream(opts.htmlDir + '/' + req.param("name") + '.html').pipe(res);
 });
 
 app.get("/token", function(req,res) {
