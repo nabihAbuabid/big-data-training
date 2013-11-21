@@ -106,7 +106,7 @@
       <section>
         <h2>Data Model</h2>
         <p>
-          In simplistic terms, columnar data-stores can be thought of as<br /><strong>A hash table of hash-tables</strong>
+          In (extremely) simplistic terms, columnar data-stores can be thought of as<br /><strong>A hash table of hash-tables</strong>
         </p>
       </section>
       <section>
@@ -270,6 +270,7 @@
           <li>Native support for M/R on top of Hadoop</li>
           <li>Server-side data filtering</li>
           <li>Range scans &amp; bulk gets</li>
+          <li>More reliable data partitioning</li>
         </ul>
       </section>
       <section>
@@ -359,6 +360,22 @@
           <li>Hot regions due to badly-planned keys</li>
           <li>Hadoop / HBase version conflicts</li>
           <li>Java dependency hell</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Use HBase When</h3>
+        <ul>
+          <li>You need row scans</li>
+          <li>You need better Hadoop integration (M/R on data)</li>
+          <li>Consistency is paramount</li>
+        </ul>
+      </section>
+      <section>
+        <h3>And if we have time</h3>
+        <ul>
+          <li><a href="http://www.kiji.org/" target="_blank">Kiji</a></li>
+          <li><a href="http://hypertable.com/" target="_blank">Hypertable</a></li>
+          <li><a href="http://accumulo.apache.org/" target="_blank">Accumulo</a></li>
         </ul>
       </section>
     </div>
