@@ -14,7 +14,8 @@ public class Topology {
     builder.setSpout("spout", new RandomSentenceSpout(), 5);
 
     builder.setBolt("split", new WordSplitterBolt(), 8).shuffleGrouping("spout");
-    builder.setBolt("count", new WordCounterBolt(), 12).fieldsGrouping("split", new Fields("word"));
+    builder.setBolt("count", new WordCounterBolt(), 12)
+        .fieldsGrouping("split", new Fields("word"));
 
     Config conf = new Config();
     conf.setDebug(true);
