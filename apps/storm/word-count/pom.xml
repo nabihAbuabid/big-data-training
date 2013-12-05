@@ -8,6 +8,16 @@
   <artifactId>word-count</artifactId>
   <version>1.0-SNAPSHOT</version>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <kiji-schema.version>1.3.3</kiji-schema.version>
+    <kiji-schema-shell.version>1.3.1</kiji-schema-shell.version>
+    <kiji-cdh4-platform.version>1.3.0</kiji-cdh4-platform.version>
+    <hadoop.version>2.0.0-mr1-cdh4.4.0</hadoop.version>
+    <hbase.version>0.94.6-cdh4.4.0</hbase.version>
+    <slf4jVersion>1.7.5</slf4jVersion>
+  </properties>
+
   <dependencies>
     <dependency>
       <groupId>storm</groupId>
@@ -16,11 +26,31 @@
       <!-- keep storm out of the jar-with-dependencies
       <scope>provided</scope>-->
     </dependency>
+    <dependency>
+      <groupId>org.kiji.schema</groupId>
+      <artifactId>kiji-schema</artifactId>
+      <version>${kiji-schema.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.kiji.platforms</groupId>
+      <artifactId>kiji-cdh4-platform</artifactId>
+      <version>${kiji-cdh4-platform.version}</version>
+    </dependency>
   </dependencies>
   <repositories>
     <repository>
       <id>clojars.org</id>
       <url>http://clojars.org/repo</url>
+    </repository>
+    <repository>
+      <id>kiji-repos</id>
+      <name>kiji-repos</name>
+      <url>https://repo.wibidata.com/artifactory/kiji</url>
+    </repository>
+    <repository>
+      <id>kiji-nightly</id>
+      <name>kiji-nightly</name>
+      <url>https://repo.wibidata.com/artifactory/kiji-nightly</url>
     </repository>
   </repositories>
 </project>
