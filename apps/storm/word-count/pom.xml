@@ -39,10 +39,6 @@
   </dependencies>
   <repositories>
     <repository>
-      <id>clojars.org</id>
-      <url>http://clojars.org/repo</url>
-    </repository>
-    <repository>
       <id>kiji-repos</id>
       <name>kiji-repos</name>
       <url>https://repo.wibidata.com/artifactory/kiji</url>
@@ -51,6 +47,10 @@
       <id>kiji-nightly</id>
       <name>kiji-nightly</name>
       <url>https://repo.wibidata.com/artifactory/kiji-nightly</url>
+    </repository>
+    <repository>
+      <id>clojars.org</id>
+      <url>http://clojars.org/repo</url>
     </repository>
   </repositories>
 </project>
