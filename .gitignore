@@ -1,3 +1,4 @@
 node_modules/*
 *.log
 *.avr
+apps/storm/word-count/target/*
